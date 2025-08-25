@@ -1,4 +1,4 @@
-import type { CategoryRepository, ProductRepository } from "../../../domain/repositories/index.js";
+import type { CategoryRepository, ProductRepository } from "../../../domain/repositories/Index.js";
 
 export class DeleteCategory {
   constructor(

@@ -36,7 +36,10 @@ export class FileProductRepository implements ProductRepository {
     return map[data.id] as Product;
   }
 
-  async update(id: string, data: Partial<Omit<Product, "id">>): Promise<Product> {
+  async update(
+    id: string,
+    data: Partial<Omit<Product, "id">>
+  ): Promise<Product> {
     const map = await this.store.readAll();
     const existing = map[id];
     if (!existing) throw new Error("Product not found");
@@ -54,5 +57,3 @@ export class FileProductRepository implements ProductRepository {
     await this.store.writeAll(map);
   }
 }
-
-

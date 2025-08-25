@@ -1,4 +1,7 @@
-import type { SellerRepository, ProductRepository } from "../../../domain/repositories/index.js";
+import type {
+  SellerRepository,
+  ProductRepository,
+} from "../../../domain/repositories/index.js";
 
 export class DeleteSeller {
   constructor(
@@ -11,5 +14,3 @@ export class DeleteSeller {
     return this.repo.delete(id);
   }
 }
-
-

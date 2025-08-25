@@ -1,6 +1,7 @@
 import type { ProductRepository } from "../../../domain/repositories/index.js";
 import type { CategoryRepository } from "../../../domain/repositories/index.js";
 import type { SellerRepository } from "../../../domain/repositories/index.js";
+import type { Product } from "../../../domain/entities/Product.js";
 
 export class GetProductDetails {
   constructor(
@@ -19,12 +20,12 @@ export class GetProductDetails {
     ]);
     const recommendedProducts = (
       await this.products.listByCategory(product.categoryId)
-    ).filter((p) => p.id !== product.id);
+    ).filter((p: Product) => p.id !== product.id);
     return {
       ...product,
       seller,
       category,
-      sellersProducts: sellersProducts.filter((p) => p.id !== product.id),
+      sellersProducts: sellersProducts.filter((p: Product) => p.id !== product.id),
       recommendedProducts,
     } as const;
   }

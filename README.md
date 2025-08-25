@@ -6,9 +6,9 @@ Node.js (ESM) + TypeScript Clean Architecture API for managing Products, Categor
 ### Architecture (Clean Architecture)
 - **Domain**: Entities and repository interfaces (`src/domain/**`).
 - **Application**: Use cases (one file per action) (`src/application/usecases/**`).
-- **Presentation**: Input validation schemas with Zod (`src/presentation/validation/**`).
-- **Infrastructure**: Express HTTP (controllers, routes, middlewares) and JSON repositories (`src/infra/**`).
-- **Shared**: Logger singleton and Swagger JSON (`src/shared/**`).
+- **Presentation**: DTOs + Zod schemas (`src/presentation/dtos/**`).
+- **Infrastructure**: Express HTTP (controllers as classes, routes wiring, middlewares) and JSON repositories (`src/infra/**`).
+- **Shared**: Logger, sanitize helper, and Swagger JSON (`src/shared/**`).
 
 Optional diagram (high-level):
 ```mermaid
@@ -25,10 +25,11 @@ flowchart LR
 
 ### Key Decisions
 - Separation of concerns per SOLID: each use case in its own file and folder.
+- Controllers are thin (HTTP only) and depend on abstractions via constructor DI; all wiring is in `src/infra/http/Routes.ts`.
+- Zod validations live with DTOs in Presentation; use cases validate incoming data using those schemas and sanitize undefined fields before persisting.
 - JSON-file repositories to match the provided `database/` seed data.
-- Zod validations in Presentation layer; Domain remains persistence-agnostic.
 - UUID v4 generated inside Create use cases; clients do not send IDs.
-- Referential integrity enforced in use cases/controllers (e.g., product requires existing seller/category; prevents ID updates; restricts deletes in use when applicable).
+- Referential integrity enforced in use cases (e.g., product requires existing seller/category; prevents ID updates; restricts deletes in use when applicable).
 - Request logging via Logger singleton to `logs/app.log` (most recent first on `/api/logs`).
 
 ### Setup
@@ -102,7 +103,9 @@ Base path: `/api`
 ![Explanation of product details 2](images/Explain%20ProductDetails2.jpg)
 ![Explanation of product details 3](images/Explain%20ProductDetails3.jpg)
 
-### Validations (Zod)
+### Validations (DTOs + Zod)
+- Schemas live in `src/presentation/dtos/*.ts` and are the single source of truth.
+- Use cases call these schemas to validate Create/Update inputs and sanitize undefineds before update.
 - Category: `name` required; unique name enforced in repository.
 - Seller: `email` valid + unique; `name`, `phone`, `sales` required.
 - Product: `name`, `price`, `realUrl`, `categoryId`, `sellerId`, `quantity`, `sales`, `rating`, `condition`, `description` required; `images` array of URLs; `productFeatures` object.
@@ -117,18 +120,18 @@ Base path: `/api`
 src/
   Main.ts
   domain/
-    entities/{Category.ts, Product.ts, Seller.ts, Index.ts}
+    entities/{Category.ts, Product.ts, Seller.ts}
     repositories/{CategoryRepository.ts, ProductRepository.ts, SellerRepository.ts, Index.ts}
   application/
     usecases/
       product/{CreateProduct.ts, UpdateProduct.ts, DeleteProduct.ts, ListProducts.ts, GetProductById.ts, GetProductsByCategory.ts, GetProductsBySeller.ts, GetProductDetails.ts}
       category/{CreateCategory.ts, UpdateCategory.ts, DeleteCategory.ts, ListCategories.ts, GetCategoryById.ts}
       seller/{CreateSeller.ts, UpdateSeller.ts, DeleteSeller.ts, ListSellers.ts, GetSellerById.ts}
-  presentation/validation/{Product.ts, Category.ts, Seller.ts}
+  presentation/dtos/{ProductDTO.ts, CategoryDTO.ts, SellerDTO.ts}
   infra/
     http/{Routes.ts, controllers/*.ts, middlewares/*.ts}
     repositories/{JsonFileRepository.ts, *Repository.ts}
-  shared/{Logger.ts, swagger.json}
+  shared/{Logger.ts, sanitize.ts, swagger.json}
 database/{product.json, category.json, seeler.json}
 logs/app.log
 ```

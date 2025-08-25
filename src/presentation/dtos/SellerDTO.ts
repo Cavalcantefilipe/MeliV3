@@ -13,3 +13,8 @@ export const sellerUpdateSchema = z.object({
   phone: z.string().min(1).optional(),
   sales: z.number().int().nonnegative().optional(),
 });
+
+export type SellerCreateDTO = z.infer<typeof sellerCreateSchema>;
+export type SellerUpdateDTO = z.infer<typeof sellerUpdateSchema>;
+
+

@@ -6,5 +6,3 @@ export class GetProductsBySeller {
     return this.products.listBySeller(sellerId);
   }
 }
-
-

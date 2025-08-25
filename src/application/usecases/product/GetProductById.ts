@@ -6,5 +6,3 @@ export class GetProductById {
     return this.products.getById(id);
   }
 }
-
-

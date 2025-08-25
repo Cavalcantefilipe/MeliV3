@@ -29,3 +29,8 @@ export const productUpdateSchema = z.object({
   images: z.array(z.string().url()).optional(),
   productFeatures: z.record(z.string(), z.any()).optional(),
 });
+
+export type ProductCreateDTO = z.infer<typeof productCreateSchema>;
+export type ProductUpdateDTO = z.infer<typeof productUpdateSchema>;
+
+

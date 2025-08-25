@@ -1,4 +1,4 @@
-import type { Category } from "../entities/Index.js";
+import type { Category } from "../entities/index.js";
 
 export interface CategoryRepository {
   list(): Promise<Category[]>;

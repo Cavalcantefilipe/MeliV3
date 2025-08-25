@@ -242,9 +242,9 @@
     "id": "ab0bd27a-303f-4e90-802a-ef877008e3b7",
     "realUrl": "https://www.mercadolivre.com.br/molho-sakura-premium-de-1l/p/MLB19148536?pdp_filters=item_id:MLB3297886619#polycard_client=recommendations_pdp-pads-up&reco_backend=pdp_pads_up_rars_v2_supermarket_repurchase_supermarket&wid=MLB3297886619&reco_model=rk_ent_v2_retsys_ads&reco_client=pdp-pads-up&reco_item_pos=2&reco_id=6b1b006f-d5f3-4383-8946-cdcc5188d17c&sid=recos&is_advertising=true&ad_domain=PDPDESKTOP_UP&ad_position=3&ad_click_id=MjY1NjNhNDgtM2JhYy00Mjk4LWFiNmUtYjllMDM0NTVkNmUx",
     "sellerId": "MLB123456793",
-    "name": "Molho Sakura Premium De 1L",
+    "name": "Molho Sakura Premium De 32L",
     "categoryId": "d0379fad-c935-4305-b499-822dd6e2dea2",
-    "price": 25.57,
+    "price": 149.99,
     "quantity": 300,
     "sales": 1300,
     "rating": 4.9,
@@ -276,5 +276,27 @@
         "Com impacto positivo": "Sim"
       }
     }
+  },
+  "bed0f46b-d630-4c5c-ac82-480e8b578003": {
+    "realUrl": "https://example.com/product",
+    "sellerId": "MLB123456791",
+    "name": "Teste product",
+    "categoryId": "90cf70ec-0d74-439e-9ab3-6fde1e3a2d10",
+    "price": 100,
+    "quantity": 10,
+    "sales": 50,
+    "rating": 4.5,
+    "condition": "Novo",
+    "description": "Product description",
+    "images": [
+      "https://example.com/image1.jpg"
+    ],
+    "productFeatures": {
+      "Características principais": {
+        "Marca": "Brand",
+        "Modelo": "Model"
+      }
+    },
+    "id": "bed0f46b-d630-4c5c-ac82-480e8b578003"
   }
 }

@@ -20,27 +20,36 @@ export class FileCategoryRepository implements CategoryRepository {
 
   async getByName(name: string): Promise<Category | undefined> {
     const map = await this.store.readAll();
-    return Object.values(map).find((c) => c.name.toLowerCase() === name.toLowerCase());
+    return Object.values(map).find(
+      (c) => c.name.toLowerCase() === name.toLowerCase()
+    );
   }
 
   async create(data: Omit<Category, "id"> & { id: string }): Promise<Category> {
     const map = await this.store.readAll();
     if (map[data.id]) throw new Error("Category id already exists");
-    const existing = Object.values(map).find((c) => c.name.toLowerCase() === data.name.toLowerCase());
+    const existing = Object.values(map).find(
+      (c) => c.name.toLowerCase() === data.name.toLowerCase()
+    );
     if (existing) throw new Error("Category name must be unique");
     map[data.id] = { id: data.id, name: data.name };
     await this.store.writeAll(map);
     return map[data.id] as Category;
   }
 
-  async update(id: string, data: Partial<Omit<Category, "id">>): Promise<Category> {
+  async update(
+    id: string,
+    data: Partial<Omit<Category, "id">>
+  ): Promise<Category> {
     const map = await this.store.readAll();
     const existing = map[id];
     if (!existing) throw new Error("Category not found");
     if (data.hasOwnProperty("id")) throw new Error("Cannot update id");
     const next: Category = { ...existing, ...data };
     if (data.name && data.name.toLowerCase() !== existing.name.toLowerCase()) {
-      const conflict = Object.values(map).find((c) => c.name!.toLowerCase() === data.name!.toLowerCase());
+      const conflict = Object.values(map).find(
+        (c) => c.name!.toLowerCase() === data.name!.toLowerCase()
+      );
       if (conflict) throw new Error("Category name must be unique");
     }
     map[id] = next;
@@ -55,5 +64,3 @@ export class FileCategoryRepository implements CategoryRepository {
     await this.store.writeAll(map);
   }
 }
-
-

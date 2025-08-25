@@ -6,5 +6,3 @@ export class ListProducts {
     return this.products.list();
   }
 }
-
-

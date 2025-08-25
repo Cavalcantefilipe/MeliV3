@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { Product } from "../../../domain/entities/index.js";
+import type { Product } from "../../../domain/entities/Product.js";
 import { GetProductDetails } from "../../../application/usecases/product/GetProductDetails.js";
 import { CreateProduct } from "../../../application/usecases/product/CreateProduct.js";
 import { UpdateProduct } from "../../../application/usecases/product/UpdateProduct.js";
@@ -8,8 +8,6 @@ import { ListProducts } from "../../../application/usecases/product/ListProducts
 import { GetProductById } from "../../../application/usecases/product/GetProductById.js";
 import { GetProductsByCategory } from "../../../application/usecases/product/GetProductsByCategory.js";
 import { GetProductsBySeller } from "../../../application/usecases/product/GetProductsBySeller.js";
-import { productCreateSchema, productUpdateSchema } from "../../../presentation/validation/Product.js";
-import { pickDefined } from "../../../shared/object.js";
 
 export class ProductController {
   constructor(
@@ -54,10 +52,10 @@ export class ProductController {
   }
 
   async create(req: Request, res: Response) {
-    const parsed = productCreateSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
     try {
-      const created = await this.createProduct.execute(parsed.data);
+      const created = await this.createProduct.execute(
+        req.body as Omit<Product, "id">
+      );
       res.status(201).json(created);
     } catch (e: any) {
       res.status(400).json({ error: e.message });
@@ -65,26 +63,13 @@ export class ProductController {
   }
 
   async update(req: Request, res: Response) {
-    if ("id" in req.body) return res.status(400).json({ error: "Cannot update id" });
-    const parsed = productUpdateSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if ("id" in req.body)
+      return res.status(400).json({ error: "Cannot update id" });
     try {
-      const d = parsed.data as Partial<Omit<Product, "id">>;
-      const payload = pickDefined(d, [
-        "realUrl",
-        "sellerId",
-        "name",
-        "categoryId",
-        "price",
-        "quantity",
-        "sales",
-        "rating",
-        "condition",
-        "description",
-        "images",
-        "productFeatures",
-      ] as const);
-      const updated = await this.updateProduct.execute(String(req.params.id), payload);
+      const updated = await this.updateProduct.execute(
+        String(req.params.id),
+        req.body as Partial<Omit<Product, "id">>
+      );
       res.json(updated);
     } catch (e: any) {
       const status = e.message.includes("not found") ? 404 : 400;
@@ -102,5 +87,3 @@ export class ProductController {
     }
   }
 }
-
-

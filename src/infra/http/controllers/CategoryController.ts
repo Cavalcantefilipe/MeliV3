@@ -1,16 +1,11 @@
 import type { Request, Response } from "express";
-import type { Category } from "../../../domain/entities/index.ts";
+import type { Category } from "../../../domain/entities/Category.js";
 import { CreateCategory } from "../../../application/usecases/category/CreateCategory.js";
 import { UpdateCategory } from "../../../application/usecases/category/UpdateCategory.js";
 import { DeleteCategory } from "../../../application/usecases/category/DeleteCategory.js";
 import { ListCategories } from "../../../application/usecases/category/ListCategories.js";
 import { GetCategoryById } from "../../../application/usecases/category/GetCategoryById.js";
-import {
-  categoryCreateSchema,
-  categoryUpdateSchema,
-} from "../../../presentation/validation/Category.js";
-import { pickDefined } from "../../../shared/object.js";
-
+ 
 export class CategoryController {
   constructor(
     private readonly listCategories: ListCategories,
@@ -32,11 +27,8 @@ export class CategoryController {
   }
 
   async create(req: Request, res: Response) {
-    const parsed = categoryCreateSchema.safeParse(req.body);
-    if (!parsed.success)
-      return res.status(400).json({ error: parsed.error.flatten() });
     try {
-      const created = await this.createCategory.execute(parsed.data);
+      const created = await this.createCategory.execute(req.body as Omit<Category, "id">);
       res.status(201).json(created);
     } catch (e: any) {
       res.status(400).json({ error: e.message });
@@ -46,13 +38,8 @@ export class CategoryController {
   async update(req: Request, res: Response) {
     if ("id" in req.body)
       return res.status(400).json({ error: "Cannot update id" });
-    const parsed = categoryUpdateSchema.safeParse(req.body);
-    if (!parsed.success)
-      return res.status(400).json({ error: parsed.error.flatten() });
     try {
-      const data = parsed.data as Partial<Omit<Category, "id">>;
-      const payload = pickDefined(data, ["name"] as const);
-      const updated = await this.updateCategory.execute(String(req.params.id), payload);
+      const updated = await this.updateCategory.execute(String(req.params.id), req.body as Partial<Omit<Category, "id">>);
       res.json(updated);
     } catch (e: any) {
       const status = e.message.includes("not found") ? 404 : 400;

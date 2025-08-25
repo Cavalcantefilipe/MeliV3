@@ -1,14 +1,11 @@
 import type { Request, Response } from "express";
-import type { Seller } from "../../../domain/entities/index.js";
-import { sellerCreateSchema, sellerUpdateSchema } from "../../../presentation/validation/Seller.js";
+import type { Seller } from "../../../domain/entities/Seller.js";
+
 import { CreateSeller } from "../../../application/usecases/seller/CreateSeller.js";
 import { UpdateSeller } from "../../../application/usecases/seller/UpdateSeller.js";
 import { DeleteSeller } from "../../../application/usecases/seller/DeleteSeller.js";
 import { ListSellers } from "../../../application/usecases/seller/ListSellers.js";
 import { GetSellerById } from "../../../application/usecases/seller/GetSellerById.js";
-import { pickDefined } from "../../../shared/object.js";
-
- 
 
 export class SellerController {
   constructor(
@@ -31,10 +28,10 @@ export class SellerController {
   }
 
   async create(req: Request, res: Response) {
-    const parsed = sellerCreateSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
     try {
-      const created = await this.createSeller.execute(parsed.data);
+      const created = await this.createSeller.execute(
+        req.body as Omit<Seller, "id">
+      );
       res.status(201).json(created);
     } catch (e: any) {
       res.status(400).json({ error: e.message });
@@ -42,18 +39,13 @@ export class SellerController {
   }
 
   async update(req: Request, res: Response) {
-    if ("id" in req.body) return res.status(400).json({ error: "Cannot update id" });
-    const parsed = sellerUpdateSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if ("id" in req.body)
+      return res.status(400).json({ error: "Cannot update id" });
     try {
-      const d = parsed.data as Partial<Omit<Seller, "id">>;
-      const payload = pickDefined(d, [
-        "name",
-        "email",
-        "phone",
-        "sales",
-      ] as const);
-      const updated = await this.updateSeller.execute(String(req.params.id), payload);
+      const updated = await this.updateSeller.execute(
+        String(req.params.id),
+        req.body as Partial<Omit<Seller, "id">>
+      );
       res.json(updated);
     } catch (e: any) {
       const status = e.message.includes("not found") ? 404 : 400;
@@ -71,5 +63,3 @@ export class SellerController {
     }
   }
 }
-
-

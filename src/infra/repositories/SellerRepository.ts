@@ -20,13 +20,17 @@ export class FileSellerRepository implements SellerRepository {
 
   async getByEmail(email: string): Promise<Seller | undefined> {
     const map = await this.store.readAll();
-    return Object.values(map).find((s) => s.email.toLowerCase() === email.toLowerCase());
+    return Object.values(map).find(
+      (s) => s.email.toLowerCase() === email.toLowerCase()
+    );
   }
 
   async create(data: Omit<Seller, "id"> & { id: string }): Promise<Seller> {
     const map = await this.store.readAll();
     if (map[data.id]) throw new Error("Seller id already exists");
-    const existing = Object.values(map).find((s) => s.email.toLowerCase() === data.email.toLowerCase());
+    const existing = Object.values(map).find(
+      (s) => s.email.toLowerCase() === data.email.toLowerCase()
+    );
     if (existing) throw new Error("Seller email must be unique");
     map[data.id] = { ...data } as Seller;
     await this.store.writeAll(map);
@@ -39,8 +43,13 @@ export class FileSellerRepository implements SellerRepository {
     if (!existing) throw new Error("Seller not found");
     if (data.hasOwnProperty("id")) throw new Error("Cannot update id");
     const next: Seller = { ...existing, ...data };
-    if (data.email && data.email.toLowerCase() !== existing.email.toLowerCase()) {
-      const conflict = Object.values(map).find((s) => s.email.toLowerCase() === data.email!.toLowerCase());
+    if (
+      data.email &&
+      data.email.toLowerCase() !== existing.email.toLowerCase()
+    ) {
+      const conflict = Object.values(map).find(
+        (s) => s.email.toLowerCase() === data.email!.toLowerCase()
+      );
       if (conflict) throw new Error("Seller email must be unique");
     }
     map[id] = next;
@@ -55,5 +64,3 @@ export class FileSellerRepository implements SellerRepository {
     await this.store.writeAll(map);
   }
 }
-
-

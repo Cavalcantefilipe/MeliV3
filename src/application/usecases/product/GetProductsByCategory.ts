@@ -6,5 +6,3 @@ export class GetProductsByCategory {
     return this.products.listByCategory(categoryId);
   }
 }
-
-

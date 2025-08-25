@@ -8,5 +8,3 @@ export interface SellerRepository {
   update(id: string, data: Partial<Omit<Seller, "id">>): Promise<Seller>;
   delete(id: string): Promise<void>;
 }
-
-
