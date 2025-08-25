@@ -97,6 +97,11 @@ Base path: `/api`
 - Logs
   - `GET /logs` — returns request logs (newest first)
 
+#### Explanation of product details
+![Explanation of product details 1](images/Explain%20productDetails1.jpg)
+![Explanation of product details 2](images/Explain%20ProductDetails2.jpg)
+![Explanation of product details 3](images/Explain%20ProductDetails3.jpg)
+
 ### Validations (Zod)
 - Category: `name` required; unique name enforced in repository.
 - Seller: `email` valid + unique; `name`, `phone`, `sales` required.

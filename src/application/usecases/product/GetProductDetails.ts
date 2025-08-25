@@ -17,19 +17,15 @@ export class GetProductDetails {
       this.categories.getById(product.categoryId),
       this.products.listBySeller(product.sellerId),
     ]);
-    const recommendedProducts = (await this.products.listByCategory(product.categoryId)).filter(
-      (p) => p.id !== product.id
-    );
+    const recommendedProducts = (
+      await this.products.listByCategory(product.categoryId)
+    ).filter((p) => p.id !== product.id);
     return {
-      [productId]: {
-        product,
-        seller,
-        category,
-        sellersProducts: sellersProducts.filter((p) => p.id !== product.id),
-        recommendedProducts,
-      },
+      ...product,
+      seller,
+      category,
+      sellersProducts: sellersProducts.filter((p) => p.id !== product.id),
+      recommendedProducts,
     } as const;
   }
 }
-
-
