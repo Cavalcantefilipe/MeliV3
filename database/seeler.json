@@ -1,0 +1,37 @@
+{
+  "MLB123456789": {
+    "id": "MLB123456789",
+    "name": "TenditudoSp",
+    "email": "contato@tenditudosp.com.br",
+    "phone": "+5511999999999",
+    "sales": 10000
+  },
+  "MLB123456790": {
+    "id": "MLB123456790",
+    "name": "PetShop",
+    "email": "contato@petshop.com.br",
+    "phone": "+5511988888888",
+    "sales": 5000
+  },
+  "MLB123456791": {
+    "id": "MLB123456791",
+    "name": "EcoVegan",
+    "email": "contato@ecovegan.com.br",
+    "phone": "+5511977777777",
+    "sales": 3000
+  },
+  "MLB123456792": {
+    "id": "MLB123456792",
+    "name": "relaxItems",
+    "email": "contato@relaxitems.com.br",
+    "phone": "+5511966666666",
+    "sales": 8000
+  },
+  "MLB123456793": {
+    "id": "MLB123456793",
+    "name": "Sakura",
+    "email": "contato@sakura.com.br",
+    "phone": "+5511955555555",
+    "sales": 2000
+  }
+}

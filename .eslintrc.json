@@ -1,0 +1,9 @@
+{
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "env": { "es2022": true, "node": true },
+  "ignorePatterns": ["dist", "node_modules"],
+  "parserOptions": { "sourceType": "module", "project": ["./tsconfig.json"] },
+  "rules": { "@typescript-eslint/no-explicit-any": "off" }
+}

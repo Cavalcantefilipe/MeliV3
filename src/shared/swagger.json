@@ -1,0 +1,110 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "Meli Test API", "version": "1.0.0" },
+  "tags": [
+    { "name": "Product", "description": "Product routes" },
+    { "name": "Category", "description": "Category routes" },
+    { "name": "Seller", "description": "Seller routes" },
+    { "name": "Logs", "description": "Log routes" }
+  ],
+  "components": {
+    "schemas": {
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" }
+        },
+        "required": ["id", "name"]
+      },
+      "Seller": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "phone": { "type": "string" },
+          "sales": { "type": "integer" }
+        },
+        "required": ["id", "name", "email", "phone", "sales"]
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "realUrl": { "type": "string", "format": "uri" },
+          "sellerId": { "type": "string" },
+          "name": { "type": "string" },
+          "categoryId": { "type": "string" },
+          "price": { "type": "number" },
+          "quantity": { "type": "integer" },
+          "sales": { "type": "integer" },
+          "rating": { "type": "number" },
+          "condition": { "type": "string" },
+          "description": { "type": "string" },
+          "images": { "type": "array", "items": { "type": "string", "format": "uri" } },
+          "productFeatures": { "type": "object", "additionalProperties": true }
+        },
+        "required": [
+          "id",
+          "realUrl",
+          "sellerId",
+          "name",
+          "categoryId",
+          "price",
+          "quantity",
+          "sales",
+          "rating",
+          "condition",
+          "description"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/api/categories": {
+      "get": { "tags": ["Category"], "summary": "List categories", "responses": { "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } } } } } } },
+      "post": { "tags": ["Category"], "summary": "Create category", "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Category" } } } }, "responses": { "201": { "description": "Created" }, "400": { "description": "Bad Request" } } }
+    },
+    "/api/categories/{id}": {
+      "get": { "tags": ["Category"], "summary": "Get category", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } } },
+      "put": { "tags": ["Category"], "summary": "Update category", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "name": { "type": "string" } } } } } }, "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" }, "404": { "description": "Not Found" } } },
+      "delete": { "tags": ["Category"], "summary": "Delete category", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "responses": { "204": { "description": "No Content" }, "404": { "description": "Not Found" }, "409": { "description": "Conflict" } } }
+    },
+    "/api/sellers": {
+      "get": { "tags": ["Seller"], "summary": "List sellers", "responses": { "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Seller" } } } } } } },
+      "post": { "tags": ["Seller"], "summary": "Create seller", "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Seller" } } } }, "responses": { "201": { "description": "Created" }, "400": { "description": "Bad Request" } } }
+    },
+    "/api/sellers/{id}": {
+      "get": { "tags": ["Seller"], "summary": "Get seller", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } } },
+      "put": { "tags": ["Seller"], "summary": "Update seller", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Seller" } } } }, "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" }, "404": { "description": "Not Found" } } },
+      "delete": { "tags": ["Seller"], "summary": "Delete seller", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "responses": { "204": { "description": "No Content" }, "404": { "description": "Not Found" }, "409": { "description": "Conflict" } } }
+    },
+    "/api/products": {
+      "get": { "tags": ["Product"], "summary": "List products", "responses": { "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } } } } } } },
+      "post": { "tags": ["Product"], "summary": "Create product", "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } }, "responses": { "201": { "description": "Created" }, "400": { "description": "Bad Request" } } }
+    },
+    "/api/products/{id}": {
+      "get": { "tags": ["Product"], "summary": "Get product", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } } },
+      "put": { "tags": ["Product"], "summary": "Update product", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } }, "responses": { "200": { "description": "OK" }, "400": { "description": "Bad Request" }, "404": { "description": "Not Found" } } },
+      "delete": { "tags": ["Product"], "summary": "Delete product", "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }], "responses": { "204": { "description": "No Content" }, "404": { "description": "Not Found" } } }
+    },
+    "/api/products/details/{id}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get product details (joins seller, category, recommendations)",
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "OK" }, "404": { "description": "Not Found" } }
+      }
+    },
+    "/api/logs": {
+      "get": {
+        "tags": ["Logs"],
+        "summary": "Get application logs (newest first)",
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  }
+}
+
+
